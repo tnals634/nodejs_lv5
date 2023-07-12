@@ -1,4 +1,4 @@
-const { posts, users } = require('../models');
+const { posts } = require('../models');
 const { Op } = require('sequelize');
 
 class PostRepository {
@@ -44,12 +44,6 @@ class PostRepository {
     });
 
     return deletePostData;
-  };
-
-  findOneUser = async (user_id) => {
-    const findUser = await users.findOne({ where: { user_id } });
-
-    return findUser;
   };
 }
 
