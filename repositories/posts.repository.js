@@ -1,4 +1,4 @@
-const { posts } = require('../models');
+const { posts, post_likes } = require('../models');
 const { Op } = require('sequelize');
 
 class PostRepository {
@@ -25,9 +25,9 @@ class PostRepository {
     return post;
   };
 
-  updatePost = async (user_id, post_id, title, content) => {
+  updatePost = async (user_id, post_id, title, content, likes) => {
     const updatePostData = await posts.update(
-      { title, content },
+      { title, content, likes },
       {
         where: {
           [Op.and]: [{ post_id }, { User_id: user_id }],
@@ -44,6 +44,41 @@ class PostRepository {
     });
 
     return deletePostData;
+  };
+
+  createLike = async (post_id, user_id) => {
+    const like = await post_likes.create({
+      Post_id: post_id,
+      User_id: user_id,
+    });
+
+    return like;
+  };
+
+  findAllLike = async (post_id) => {
+    const likes = await post_likes.findAll({ where: { Post_id: post_id } });
+
+    return likes;
+  };
+
+  findOneLike = async (post_id, user_id) => {
+    const like = await post_likes.findOne({
+      where: {
+        [Op.and]: [{ Post_id: post_id }, { User_id: user_id }],
+      },
+    });
+
+    return like;
+  };
+
+  deleteLike = async (post_id, user_id) => {
+    const dLike = await post_likes.destroy({
+      where: {
+        [Op.and]: [{ Post_id: post_id }, { User_id: user_id }],
+      },
+    });
+
+    return dLike;
   };
 }
 
