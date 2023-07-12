@@ -8,12 +8,13 @@ class PostRepository {
     return allPosts;
   };
 
-  createPost = async (user_id, nickname, title, content) => {
+  createPost = async (user_id, nickname, title, content, likes) => {
     const createPostData = await posts.create({
       User_id: user_id,
       nickname,
       title,
       content,
+      likes,
     });
 
     return createPostData;

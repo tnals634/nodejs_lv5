@@ -55,7 +55,8 @@ class PostsController {
         user.user_id,
         user.nickname,
         title,
-        content
+        content,
+        0
       );
       res.status(201).json({ message: '게시글 작성에 성공하였습니다.' });
     } catch (error) {

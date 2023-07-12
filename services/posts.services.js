@@ -2,12 +2,13 @@ const PostRepository = require('../repositories/posts.repository');
 class PostService {
   postRepository = new PostRepository();
 
-  createPost = async (user_id, nickname, title, content) => {
+  createPost = async (user_id, nickname, title, content, likes) => {
     const post = await this.postRepository.createPost(
       user_id,
       nickname,
       title,
-      content
+      content,
+      likes
     );
 
     return {
@@ -134,12 +135,7 @@ class PostService {
   findAllLike = async (post_id) => {
     const allLike = await this.postRepository.findAllLike(post_id);
 
-    return {
-      Post_id: allLike.Post_id,
-      User_id: allLike.User_id,
-      createdAt: allLike.createdAt,
-      updatedAt: allLike.updatedAt,
-    };
+    return allLike;
   };
 
   findOneLike = async (post_id, user_id) => {
