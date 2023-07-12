@@ -12,12 +12,12 @@ router.post(
 );
 router.get('/posts/:post_id/comments', commentsController.getComments);
 router.put(
-  '/posts/:post_id/comments/comment_id',
+  '/posts/:post_id/comments/:comment_id',
   authMiddleWare,
   commentsController.putComment
 );
 router.delete(
-  '/posts/:post_id/comments/comment_id',
+  '/posts/:post_id/comments/:comment_id',
   authMiddleWare,
   commentsController.deleteComment
 );

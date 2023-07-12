@@ -1,8 +1,6 @@
 const PostRepository = require('../repositories/posts.repository');
-const UserRepository = require('../repositories/users.repository');
 class PostService {
   postRepository = new PostRepository();
-  userRepository = new UserRepository();
 
   createPost = async (user_id, nickname, title, content) => {
     const post = await this.postRepository.createPost(
@@ -90,12 +88,6 @@ class PostService {
       createdAt: findPost.createdAt,
       updatedAt: findPost.updatedAt,
     };
-  };
-
-  findOneUser = async (user_id) => {
-    const user = await this.userRepository.findUserById(user_id);
-
-    return user;
   };
 }
 

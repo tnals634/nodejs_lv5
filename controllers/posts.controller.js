@@ -1,7 +1,8 @@
 const PostService = require('../services/posts.services');
-
+const UserService = require('../services/users.services');
 class PostsController {
   postService = new PostService();
+  userService = new UserService();
 
   getPosts = async (req, res, next) => {
     const allPosts = await this.postService.findAllPost();
@@ -35,7 +36,7 @@ class PostsController {
     const { user_id } = res.locals.user;
 
     try {
-      const user = await this.postService.findOneUser(user_id);
+      const user = await this.userService.findUserById(user_id);
       if (!title || !content) {
         return res
           .status(400)
