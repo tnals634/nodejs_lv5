@@ -176,7 +176,6 @@ class PostsController {
     }
     try {
       const post = await this.postService.findOnePost(post_id);
-      const like = await this.postService.findOneLike(post_id, user_id);
       await this.postService.deleteLike(post_id, user_id);
       const findAllLike = await this.postService.findAllLike(post_id);
 
@@ -199,7 +198,7 @@ class PostsController {
 
   findAllLikePost = async (req, res, next) => {
     try {
-      const findAllLike = await this.postService.findAllLike(post_id);
+      const findAllLike = await this.postService.findAllLikePost();
 
       res.json({ posts: findAllLike });
     } catch (error) {

@@ -55,6 +55,14 @@ class PostRepository {
     return like;
   };
 
+  findAllLikePost = async () => {
+    const likes = await posts.findAll({
+      where: { likes: { [Op.gt]: 0 } },
+    });
+
+    return likes;
+  };
+
   findAllLike = async (post_id) => {
     const likes = await post_likes.findAll({ where: { Post_id: post_id } });
 

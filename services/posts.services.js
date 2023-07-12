@@ -111,21 +111,35 @@ class PostService {
     };
   };
 
-  findAllLike = async (post_id) => {
-    const allLikePosts = await this.postRepository.findAllLike(post_id);
+  findAllLikePost = async () => {
+    const allLikePosts = await this.postRepository.findAllLikePost();
 
     allLikePosts.sort((a, b) => {
       return b.createdAt - a.createdAt;
     });
 
-    return allLikePosts.map((like) => {
+    return allLikePosts.map((post) => {
       return {
-        Post_id: like.Post_id,
-        User_id: like.User_id,
-        createdAt: like.createdAt,
-        updatedAt: like.updatedAt,
+        post_id: post.post_id,
+        User_id: post.User_id,
+        nickname: post.nickname,
+        title: post.title,
+        likes: post.likes,
+        createdAt: post.createdAt,
+        updatedAt: post.updatedAt,
       };
     });
+  };
+
+  findAllLike = async (post_id) => {
+    const allLike = await this.postRepository.findAllLike(post_id);
+
+    return {
+      Post_id: allLike.Post_id,
+      User_id: allLike.User_id,
+      createdAt: allLike.createdAt,
+      updatedAt: allLike.updatedAt,
+    };
   };
 
   findOneLike = async (post_id, user_id) => {
