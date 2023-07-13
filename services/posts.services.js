@@ -35,7 +35,6 @@ class PostService {
         User_id: post.User_id,
         nickname: post.nickname,
         title: post.title,
-        likes: post.likes,
         createdAt: post.createdAt,
         updatedAt: post.updatedAt,
       };
