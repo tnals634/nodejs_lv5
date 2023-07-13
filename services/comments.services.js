@@ -1,13 +1,33 @@
 const CommentRepository = require('../repositories/comments.repository');
+const PostRepository = require('../repositories/posts.repository');
+const UserRepository = require('../repositories/users.repository');
 
 class CommentService {
   commentRepository = new CommentRepository();
+  postRepository = new PostRepository();
+  userRepository = new UserRepository();
 
-  createOneComment = async (user_id, post_id, nickname, comment) => {
+  createComment = async (user_id, post_id, comment) => {
+    const post = await this.postRepository.findOnePost(post_id);
+    const user = await this.userRepository.findUserById(user_id);
+    const error = new Error();
+    if (!post) {
+      error.message = '게시글이 존재하지 않습니다.';
+      error.status = 404;
+      throw error;
+    } else if (!comment) {
+      error.message = '댓글을 입력해주세요.';
+      error.status = 400;
+      throw error;
+    } else if (typeof comment != 'string') {
+      error.message = '댓글 형식이 일치하지 않습니다.';
+      error.status = 400;
+      throw error;
+    }
     const createCommentData = await this.commentRepository.createComment(
       user_id,
       post_id,
-      nickname,
+      user.nickname,
       comment
     );
 
@@ -22,7 +42,14 @@ class CommentService {
     };
   };
 
-  findComments = async (post_id) => {
+  findAllComment = async (post_id) => {
+    const post = await this.postRepository.findOnePost(post_id);
+    const error = new Error();
+    if (!post) {
+      error.message = '게시글이 존재하지 않습니다.';
+      error.status = 404;
+      throw error;
+    }
     const findComments = await this.commentRepository.findAllComment(post_id);
 
     findComments.sort((a, b) => {
@@ -41,22 +68,38 @@ class CommentService {
     });
   };
 
-  findCommentById = async (comment_id) => {
-    const comment = await this.commentRepository.findCommentById(comment_id);
-
-    return comment;
-  };
-
-  updateOneComment = async (user_id, post_id, comment_id, comment) => {
+  updateComment = async (user_id, post_id, comment_id, comment) => {
+    const post = await this.postRepository.findOnePost(post_id);
+    const user = await this.userRepository.findUserById(user_id);
     const findComment = await this.commentRepository.findCommentById(
       comment_id
     );
-    if (!findComment) throw new Error("Comment doesn't exist");
-
+    const error = new Error();
+    if (!post) {
+      error.message = '게시글이 존재하지 않습니다.';
+      error.status = 404;
+      throw error;
+    } else if (!findComment) {
+      error.message = '댓글이 존재하지 않습니다.';
+      error.status = 404;
+      throw error;
+    } else if (!comment) {
+      error.message = '댓글을 작성해주세요.';
+      error.status = 400;
+      throw error;
+    } else if (typeof comment != 'string') {
+      error.message = '댓글 형식이 일치하지 않습니다.';
+      error.status = 400;
+      throw error;
+    } else if (user_id != findComment.User_id) {
+      error.message = '댓글 수정 권한이 존재하지 않습니다.';
+      error.status = 403;
+      throw error;
+    }
     await this.commentRepository.updateComment(
-      user_id,
-      post_id,
-      comment_id,
+      user.user_id,
+      post.post_id,
+      findComment.comment_id,
       comment
     );
 
@@ -76,21 +119,26 @@ class CommentService {
   };
 
   deleteComment = async (user_id, post_id, comment_id) => {
-    const findComment = await this.commentRepository.findCommentById(
-      comment_id
-    );
-    if (!findComment) throw new Error("comment doesn't exist");
+    const post = await this.postRepository.findOnePost(post_id);
+    const comment = await this.commentRepository.findCommentById(comment_id);
+    const error = new Error();
+    if (!post) {
+      error.message = '게시글이 존재하지 않습니다.';
+      error.status = 404;
+      throw error;
+    } else if (!comment) {
+      error.message = '댓글이 존재하지 않습니다.';
+      error.status = 404;
+      throw error;
+    } else if (user_id != comment.User_id) {
+      error.message = '댓글 삭제 권한이 존재하지 않습니다.';
+      error.status = 403;
+      throw error;
+    }
 
     await this.commentRepository.deleteComment(user_id, post_id, comment_id);
 
-    return {
-      Post_id: findComment.Post_id,
-      User_id: findComment.User_id,
-      nickname: findComment.nickname,
-      comment: findComment.comment,
-      createdAt: findComment.createdAt,
-      updatedAt: findComment.updatedAt,
-    };
+    return;
   };
 }
 
