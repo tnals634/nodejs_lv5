@@ -3,7 +3,14 @@ const { Op } = require('sequelize');
 
 class PostRepository {
   findAllPost = async () => {
-    const allPosts = await posts.findAll();
+    const allPosts = await posts.findAll({
+      include: [
+        {
+          model: users,
+          attributes: ['user_id', 'nickname'],
+        },
+      ],
+    });
 
     return allPosts;
   };
@@ -21,7 +28,15 @@ class PostRepository {
   };
 
   findOnePost = async (post_id) => {
-    const post = await posts.findOne({ where: { post_id } });
+    const post = await posts.findOne({
+      where: { post_id },
+      include: [
+        {
+          model: users,
+          attributes: ['user_id', 'nickname'],
+        },
+      ],
+    });
 
     return post;
   };
@@ -59,6 +74,12 @@ class PostRepository {
   findAllLikePost = async () => {
     const likes = await posts.findAll({
       where: { likes: { [Op.gt]: 0 } },
+      include: [
+        {
+          model: users,
+          attributes: ['user_id', 'nickname'],
+        },
+      ],
     });
 
     return likes;

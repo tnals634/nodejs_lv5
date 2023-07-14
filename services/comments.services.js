@@ -59,8 +59,8 @@ class CommentService {
     return findComments.map((comment) => {
       return {
         comment_id: comment.comment_id,
-        User_id: comment.User_id,
-        nickname: comment.nickname,
+        user_id: comment.user.user_id,
+        nickname: comment.user.nickname,
         comment: comment.comment,
         createdAt: comment.createdAt,
         updatedAt: comment.updatedAt,

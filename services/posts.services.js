@@ -49,8 +49,8 @@ class PostService {
     return allPosts.map((post) => {
       return {
         post_id: post.post_id,
-        User_id: post.User_id,
-        nickname: post.nickname,
+        user_id: post.user.user_id,
+        nickname: post.user.nickname,
         title: post.title,
         createdAt: post.createdAt,
         updatedAt: post.updatedAt,
@@ -68,8 +68,8 @@ class PostService {
     }
     return {
       post_id: post.post_id,
-      User_id: post.User_id,
-      nickname: post.nickname,
+      user_id: post.user.user_id,
+      nickname: post.user.nickname,
       title: post.title,
       content: post.content,
       likes: post.likes,
@@ -205,8 +205,8 @@ class PostService {
     return allLikePosts.map((post) => {
       return {
         post_id: post.post_id,
-        User_id: post.User_id,
-        nickname: post.nickname,
+        user_id: post.user.user_id,
+        nickname: post.user.nickname,
         title: post.title,
         likes: post.likes,
         createdAt: post.createdAt,

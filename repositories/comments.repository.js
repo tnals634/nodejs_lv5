@@ -4,6 +4,12 @@ class CommentRepository {
   findAllComment = async (post_id) => {
     const allPostComments = await comments.findAll({
       where: { Post_id: post_id },
+      include: [
+        {
+          model: users,
+          attributes: ['user_id', 'nickname'],
+        },
+      ],
     });
 
     return allPostComments;
